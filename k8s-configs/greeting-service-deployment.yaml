@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeting-service-deployment
+  labels:
+    app: greeting-service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0  # Keep all Pods running during update
+      maxSurge: 1        # Allow 1 extra Pod during update
+  selector:
+    matchLabels:
+      app: greeting-service
+  template:
+    metadata:
+      labels:
+        app: greeting-service
+    spec:
+      containers:
+      - name: greeting-service
+        image: greeting-service:v2
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 4001
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4001
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 4001
+          initialDelaySeconds: 5
+          periodSeconds: 5
