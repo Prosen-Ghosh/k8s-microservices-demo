@@ -21,10 +21,27 @@ spec:
     spec:
       containers:
       - name: greeting-service
-        image: greeting-service:v2
+        image: greeting-service:v3
         imagePullPolicy: Never
         ports:
         - containerPort: 4001
+        env:
+        # Method 1: Reference specific keys from ConfigMap
+        - name: GREETING_MSG
+          valueFrom:
+            configMapKeyRef:
+              name: greeting-config
+              key: GREETING_MSG
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: greeting-config
+              key: APP_ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: greeting-config
+              key: LOG_LEVEL
         resources:
           requests:
             memory: "64Mi"

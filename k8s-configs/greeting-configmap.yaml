@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: greeting-config
+  labels:
+    app: greeting-service
+data:
+  GREETING_MSG: "🚀 UPDATED: Hello from ConfigMap v2!"  # Changed
+  APP_ENV: "production"
+  LOG_LEVEL: "debug"  # Changed from info to debug
